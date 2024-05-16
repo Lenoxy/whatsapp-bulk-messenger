@@ -47,14 +47,17 @@ f.close()
 print(style.YELLOW + '\nThis is your message-')
 print(style.GREEN + message)
 print("\n" + style.RESET)
-message = quote(message)
 
 numbers = []
-f = open("numbers.txt", "r")
+names = []
+f = open("numbers.csv", "r")
 for line in f.read().splitlines():
 	line.replace(" ", "")
-	if line.strip() != "":
-		numbers.append(line.strip())
+	line_clean = line.strip()
+	if line_clean != "":
+		line_list = line_clean.split(";")
+		names.append(line_list[0])
+		numbers.append(line_list[1])
 f.close()
 total_number=len(numbers)
 print(style.RED + 'We found ' + str(total_number) + ' numbers in the file' + style.RESET)
@@ -64,13 +67,13 @@ driver = webdriver.Chrome(options=options)
 print('Once your browser opens up sign in to web whatsapp')
 driver.get('https://web.whatsapp.com')
 input(style.MAGENTA + "AFTER logging into Whatsapp Web is complete and your chats are visible, press ENTER..." + style.RESET)
-for idx, number in enumerate(numbers):
+for i, number in enumerate(numbers):
 	number = number.strip()
 	if number == "":
 		continue
-	print(style.YELLOW + '{}/{}: Sending message to {}.'.format((idx+1), total_number, number) + style.RESET)
+	print(style.YELLOW + '{}/{}: Sending message to {}.'.format((i+1), total_number, number) + style.RESET)
 	try:
-		url = 'https://web.whatsapp.com/send?phone=' + number + '&text=' + message
+		url = 'https://web.whatsapp.com/send?phone=' + number + '&text=' + quote(message.replace("{name}", names[i]))
 		sent = False
 		for i in range(3):
 			if not sent:

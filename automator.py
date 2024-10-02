@@ -8,8 +8,10 @@ from time import sleep
 from urllib.parse import quote
 import os
 
+from webdriver_manager.chrome import ChromeDriverManager
+
 service = Service(executable_path="chromedriver")
-options = webdriver.ChromeOptions()
+options = Options()
 options.add_experimental_option("excludeSwitches", ["enable-logging"])
 options.add_argument("--profile-directory=Default")
 options.add_argument("--user-data-dir=/var/tmp/chrome_user_data")
@@ -44,7 +46,7 @@ f = open("message.txt", "r", encoding="utf8")
 message = f.read()
 f.close()
 
-print(style.YELLOW + '\nThis is your message-')
+print(style.YELLOW + '\nYour Message to send:')
 print(style.GREEN + message)
 print("\n" + style.RESET)
 
@@ -63,7 +65,8 @@ total_number=len(numbers)
 print(style.RED + 'We found ' + str(total_number) + ' numbers in the file' + style.RESET)
 delay = 30
 
-driver = webdriver.Chrome(options=options)
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+#driver = webdriver.Chrome(options=options)
 print('Once your browser opens up sign in to web whatsapp')
 driver.get('https://web.whatsapp.com')
 input(style.MAGENTA + "AFTER logging into Whatsapp Web is complete and your chats are visible, press ENTER..." + style.RESET)
